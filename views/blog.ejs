@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include("./partials/head") %>
+    <title>Blog</title>
+  </head>
+  <body>
+    <%- include("./partials/navbar") %>
+
+    <div class="container mt-3">
+      <% if (locals.item) { %>
+      <h1 class="card-title"><%=item?.title %></h1>
+      <img src="<%="/"+item.coverImgURL %>" alt="<%=item?.title %>"
+      style='object-fit:cover;max-width:700px;margin-top:3rem' />
+      <pre style="margin-top: 3rem"><%=item?.body %></pre>
+      <% } %>
+    </div>
+    <% if (locals.item.createdBy) { %>
+    <div class="container mt-4 d-flex align-items-center">
+      <img
+        src="<%=item.createdBy.profileImage %>"
+        alt="user_icon"
+        width="70px"
+      />
+      <h5 style="margin: 0rem 0 0 0.6rem">
+        <%=item?.createdBy?.fullName %>      ->
+        <span style="font-size: 1.2rem;opacity: 0.7;">COMMENTS: <%=locals.comments?.length %></span>
+      </h5>
+    </div>
+    <% } %>
+
+    <div class="container mt-3">
+      <% if (locals.user) { %>
+      <form action="<%=`/blog/comment/${item?._id}` %>" method="post">
+        <div class="mb-3 d-flex gap-2">
+          <input
+            type="text"
+            name="content"
+            class="form-control"
+            placeholder="Your comment here!"
+          />
+          <button type="submit" class="btn btn-primary">Post</button>
+        </div>
+      </form>
+      <% } %>
+    </div>
+
+    <% if (locals.comments?.length>0) { %>
+    <div class="container mt-3 mb-3">
+      <% comments.forEach(element => { %>
+      <div class="mt-1">
+        <img
+          src="<%=element.createdBy.profileImage %>"
+          width="30"
+          alt="user-profile_img"
+        />
+        <span style="font-size: 0.9rem;"><%=element.createdBy.fullName %></span>:->
+        <span style="font-size: 0.9rem;opacity: 0.7;"><%=element.content %></span>
+      </div>
+      <% }) %>
+    </div>
+    <% } %> <%-include('./partials/script')%>
+  </body>
+</html>
